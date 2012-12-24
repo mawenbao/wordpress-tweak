@@ -1,0 +1,60 @@
+--- sitemap-core.php	2012-12-24 15:20:32.000000000 +0800
++++ sitemap-core.php.new	2012-12-24 15:20:22.000000000 +0800
+@@ -1963,9 +1963,21 @@
+ 				if($cats && is_array($cats) && count($cats)>0) {
+ 					foreach($cats AS $cat) {
+ 						if(!in_array($cat->term_id, $exclCats)) {
++							// Get the modify date of the latest post in each tag
++							$query_posts_args = array(
++								'sort_order'  => 'DESC',
++								'sort_column' => 'post_modified',
++								'numberposts' => 1,
++								'category'    => $cat->term_id
++							);
++							$cat_posts = get_posts($query_posts_args);
++							$cat_lastmod = 0;
++							if (count($cat_posts) > 0) {
++								$cat_lastmod = $this->GetTimestampFromMySql($cat_posts[0]->post_modified);
++							}
+ 							if (!$qt["enabled"])
+-								$this->AddUrl(get_category_link($cat->term_id),0,$this->GetOption("cf_cats"),$this->GetOption("pr_cats"));
+-							else qt_permalink($qt, get_category_link($cat->term_id), null, 0, $this->GetOption("cf_cats"), $this->GetOption("pr_cats"), $this);
++								$this->AddUrl(get_category_link($cat->term_id),$cat_lastmod,$this->GetOption("cf_cats"),$this->GetOption("pr_cats"));
++							else qt_permalink($qt, get_category_link($cat->term_id), null, $cat_lastmod, $this->GetOption("cf_cats"), $this->GetOption("pr_cats"), $this);
+ 						}
+ 					}
+ 				}
+@@ -2078,11 +2090,24 @@
+ 			$tags = get_terms("post_tag",array("hide_empty"=>true,"hierarchical"=>false));
+ 			if($tags && is_array($tags) && count($tags)>0) {
+ 				foreach($tags AS $tag) {
++					// Get the modify date of the latest post in each tag
++					$query_posts_args = array(
++						'sort_order'  => 'DESC',
++						'sort_column' => 'post_modified',
++						'numberposts' => 1,
++						'tag_id'      => $tag->term_id
++					);
++					$tag_posts = get_posts($query_posts_args);
++					$tag_lastmod = 0;
++					if (count($tag_posts) > 0) {
++						$tag_lastmod = $this->GetTimestampFromMySql($tag_posts[0]->post_modified);
++					}
+ 					if (!$qt["enabled"])
+-						$this->AddUrl(get_tag_link($tag->term_id),0,$this->GetOption("cf_tags"),$this->GetOption("pr_tags"));
+-					else qt_permalink($qt, get_tag_link($tag->term_id), null, 0, $this->GetOption("cf_tags"), $this->GetOption("pr_tags"), $this);
++						$this->AddUrl(get_tag_link($tag->term_id),$tag_lastmod,$this->GetOption("cf_tags"),$this->GetOption("pr_tags"));
++					else qt_permalink($qt, get_tag_link($tag->term_id), null, $tag_lastmod, $this->GetOption("cf_tags"), $this->GetOption("pr_tags"), $this);
+ 				}
+ 			}
++            fclose($file);
+ 			if($debug) $this->AddElement(new GoogleSitemapGeneratorDebugEntry("Debug: End Tags"));
+ 		}
+ 		
+@@ -2564,4 +2589,4 @@
+ 		
+ 		
+ 	}
+-}
+\ No newline at end of file
++}
