@@ -2503,8 +2503,7 @@ class GoogleSitemapGenerator {
 		list($date, $hours) = explode(' ', $mysqlDateTime);
 		list($year,$month,$day) = explode('-',$date);
 		list($hour,$min,$sec) = explode(':',$hours);
-		$gmt_time = mktime(intval($hour), intval($min), intval($sec), intval($month), intval($day), intval($year));
-        return ($gmt_time + get_option('gmt_offset') * 3600);
+		return mktime(intval($hour), intval($min), intval($sec), intval($month), intval($day), intval($year));
 	}
 	
 	/**
