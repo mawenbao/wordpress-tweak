@@ -1655,8 +1655,6 @@ class GoogleSitemapGenerator {
 		
 		//Add the home page (WITH a slash!)
 		if($this->GetOption("in_home")) {
-            // Get the modify date of the latest post
-            $lastPostDate = get_lastpostmodified('GMT');
 			if('page' == get_option('show_on_front') && get_option('page_on_front')) {
 				$pageOnFront = get_option('page_on_front');
 				$p = get_page($pageOnFront);

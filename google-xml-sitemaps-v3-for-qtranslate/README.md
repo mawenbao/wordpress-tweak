@@ -11,4 +11,4 @@
     &lt;priority>0.3&lt;/priority> 
 &lt;/url> 
 </pre>
-如果使用[Google XML Sitemaps v3 for qTranslate][1]3.2.8.1版本，可以直接使用patch文件。
+如果使用[Google XML Sitemaps v3 for qTranslate][1]3.2.8.1版本，可以直接使用[patch](https://github.com/wilbur-ma/wordpress-tweak/blob/master/patch/google-xml-sitemaps-v3-for-qtranslate-3.2.8.1.patch)文件。
