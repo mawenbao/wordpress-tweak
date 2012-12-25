@@ -1655,14 +1655,16 @@ class GoogleSitemapGenerator {
 		
 		//Add the home page (WITH a slash!)
 		if($this->GetOption("in_home")) {
+            // Get the modify date of the latest post
+            $lastPostDate = get_lastpostmodified('GMT');
 			if('page' == get_option('show_on_front') && get_option('page_on_front')) {
 				$pageOnFront = get_option('page_on_front');
 				$p = get_page($pageOnFront);
 				if($p) {
 					$homePid = $p->ID;
 					if (!$qt["enabled"])
-						$this->AddUrl(trailingslashit($home),$this->GetTimestampFromMySql(($p->post_modified_gmt && $p->post_modified_gmt!='0000-00-00 00:00:00'?$p->post_modified_gmt:$p->post_date_gmt)),$this->GetOption("cf_home"),$this->GetOption("pr_home"));
-					else qt_permalink($qt, trailingslashit($home), null, ($p->post_modified_gmt && $p->post_modified_gmt!='0000-00-00 00:00:00'?$p->post_modified_gmt:$p->post_date_gmt), $this->GetOption("cf_home"), $this->GetOption("pr_home"), $this);
+						$this->AddUrl(trailingslashit($home),$this->GetTimestampFromMySql(get_lastpostmodified('GMT')),$this->GetOption("cf_home"),$this->GetOption("pr_home"));
+					else qt_permalink($qt, trailingslashit($home), null, get_lastpostmodified('GMT'), $this->GetOption("cf_home"), $this->GetOption("pr_home"), $this);
 				}
 			} else {
 				if (!$qt["enabled"])
@@ -1973,7 +1975,7 @@ class GoogleSitemapGenerator {
 							$cat_posts = get_posts($query_posts_args);
 							$cat_lastmod = 0;
 							if (count($cat_posts) > 0) {
-								$cat_lastmod = $this->GetTimestampFromMySql($cat_posts[0]->post_modified);
+								$cat_lastmod = $this->GetTimestampFromMySql($cat_posts[0]->post_modified_gmt);
 							}
 							if (!$qt["enabled"])
 								$this->AddUrl(get_category_link($cat->term_id),$cat_lastmod,$this->GetOption("cf_cats"),$this->GetOption("pr_cats"));
@@ -2100,7 +2102,7 @@ class GoogleSitemapGenerator {
 					$tag_posts = get_posts($query_posts_args);
 					$tag_lastmod = 0;
 					if (count($tag_posts) > 0) {
-						$tag_lastmod = $this->GetTimestampFromMySql($tag_posts[0]->post_modified);
+						$tag_lastmod = $this->GetTimestampFromMySql($tag_posts[0]->post_modified_gmt);
 					}
 					if (!$qt["enabled"])
 						$this->AddUrl(get_tag_link($tag->term_id),$tag_lastmod,$this->GetOption("cf_tags"),$this->GetOption("pr_tags"));
@@ -2503,7 +2505,8 @@ class GoogleSitemapGenerator {
 		list($date, $hours) = explode(' ', $mysqlDateTime);
 		list($year,$month,$day) = explode('-',$date);
 		list($hour,$min,$sec) = explode(':',$hours);
-		return mktime(intval($hour), intval($min), intval($sec), intval($month), intval($day), intval($year));
+		$gmt_time = mktime(intval($hour), intval($min), intval($sec), intval($month), intval($day), intval($year));
+        return ($gmt_time + get_option('gmt_offset') * 3600);
 	}
 	
 	/**
