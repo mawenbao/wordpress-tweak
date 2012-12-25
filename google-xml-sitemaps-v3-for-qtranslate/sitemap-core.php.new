@@ -1993,9 +1993,9 @@ class GoogleSitemapGenerator {
 			//WP2.1 introduced post_status='future', for earlier WP versions we need to check the post_date_gmt
 			$arcresults = $wpdb->get_results("
 						SELECT DISTINCT
-							YEAR(post_date_gmt) AS `year`,
-							MONTH(post_date_gmt) AS `month`,
-							MAX(post_date_gmt) as last_mod,
+							YEAR(post_modified_gmt) AS `year`,
+							MONTH(post_modified_gmt) AS `month`,
+							MAX(post_modified_gmt) as last_mod,
 							count(ID) as posts
 						FROM
 							$wpdb->posts
@@ -2003,12 +2003,12 @@ class GoogleSitemapGenerator {
 							post_date < '$now'
 							AND post_status = 'publish'
 							AND post_type = 'post'
-							" . (floatval($wp_version) < 2.1?"AND {$wpdb->posts}.post_date_gmt <= '" . gmdate('Y-m-d H:i:59') . "'":"") . "
+							" . (floatval($wp_version) < 2.1?"AND {$wpdb->posts}.post_modified_gmt <= '" . gmdate('Y-m-d H:i:59') . "'":"") . "
 						GROUP BY
-							YEAR(post_date_gmt),
-							MONTH(post_date_gmt)
+							YEAR(post_modified_gmt),
+							MONTH(post_modified_gmt)
 						ORDER BY
-							post_date_gmt DESC");
+							post_modified_gmt DESC");
 			if ($arcresults) {
 				foreach ($arcresults as $arcresult) {
 					
