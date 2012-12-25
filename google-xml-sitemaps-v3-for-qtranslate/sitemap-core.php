@@ -1968,6 +1968,7 @@ class GoogleSitemapGenerator {
 								'sort_order'  => 'DESC',
 								'sort_column' => 'post_modified',
 								'numberposts' => 1,
+                                'post_status' => 'publish',
 								'category'    => $cat->term_id
 							);
 							$cat_posts = get_posts($query_posts_args);
@@ -2095,6 +2096,7 @@ class GoogleSitemapGenerator {
 						'sort_order'  => 'DESC',
 						'sort_column' => 'post_modified',
 						'numberposts' => 1,
+                        'post_status' => 'publish',
 						'tag_id'      => $tag->term_id
 					);
 					$tag_posts = get_posts($query_posts_args);
