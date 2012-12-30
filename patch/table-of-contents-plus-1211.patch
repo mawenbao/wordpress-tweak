@@ -1,0 +1,43 @@
+--- toc.php	2012-12-30 11:59:58.000000000 +0800
++++ toc.php.new	2012-12-30 11:59:51.000000000 +0800
+@@ -1159,7 +1159,8 @@
+ 				
+ 				// list item
+ 				if ( in_array($matches[$i][2], $this->options['heading_levels']) ) {
+-					$html .= '<a href="#' . $this->url_anchor_target( $matches[$i][0] ) . '">';
++                                        $anchor = $this->url_anchor_target( $matches[$i][0] );
++					$html .= '<span id="toc-' . $anchor . '"><a href="#' . $anchor . '">';
+ 					if ( $this->options['ordered_list'] ) {
+ 						// attach leading numbers when lower in hierarchy
+ 						$html .= '<span class="toc_number toc_depth_' . ($current_depth - $numbered_items_min + 1) . '">';
+@@ -1171,7 +1172,7 @@
+ 						$html .= ($numbered_items[$current_depth] + 1) . '</span> ';
+ 						$numbered_items[$current_depth]++;
+ 					}
+-					$html .= strip_tags($matches[$i][0]) . '</a>';
++					$html .= strip_tags($matches[$i][0]) . '</a></span>';
+ 				}
+ 				
+ 				
+@@ -1284,17 +1285,17 @@
+ 								'</h' . $matches[$i][2] . '>'	// end of heading
+ 							),
+ 							array(
+-								$matches[$i][1] . '<span id="' . $anchor . '">',
+-								'</span></h' . $matches[$i][2] . '>'
++								$matches[$i][1] . '<a href="#toc-' . $anchor . '"><span id="' . $anchor . '">',
++								'</span></a></h' . $matches[$i][2] . '>'
+ 							),
+ 							$matches[$i][0]
+ 						);
+ 
+ 						// assemble flat list
+ 						if ( !$this->options['show_heirarchy'] ) {
+-							$items .= '<li><a href="#' . $anchor . '">';
++							$items .= '<li><span id="toc' . $anchor . '"><a href="#' . $anchor . '">';
+ 							if ( $this->options['ordered_list'] ) $items .= count($replace) . ' ';
+-							$items .= strip_tags($matches[$i][0]) . '</a></li>';
++							$items .= strip_tags($matches[$i][0]) . '</a></span></li>';
+ 						}
+ 					}
+ 

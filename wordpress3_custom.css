@@ -1,0 +1,38 @@
+/* my custom css for wordpress3 */
+/* for clean archiver reloaded */
+.car-collapse .car-yearmonth { cursor: s-resize; }
+/* for cc license footer image */
+.cc-80-15-image { width: 80px; height: 15px; }
+
+/* change h1 color */
+h1 a {
+    color: #404040 !important;
+}
+.menu a:hover {
+    text-decoration: none !important;
+}
+a:hover {
+    text-decoration: underline !important;
+}
+.navigation a:hover {
+    color: #AAA !important;
+}
+h2 a {
+    color: #777 !important;
+}
+
+h2 a:hover {
+    color: #777 !important;
+    text-decoration: none !important;
+}
+/*
+a {
+    color: #0368B8 !important;
+}
+*/
+/* change toc+ style */
+
+#toc_container {
+    float: right;
+    margin-left: 5px;
+}
