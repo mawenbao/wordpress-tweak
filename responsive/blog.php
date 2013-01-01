@@ -42,7 +42,16 @@ if ( !defined('ABSPATH')) exit;
                 <div class="post-meta">
                 <?php responsive_post_meta_data(); ?>
                 <?php printf(__('分类 %s', 'responsive'), get_the_category_list(', ')); ?> 
-				    <?php if ( comments_open() ) : ?>
+                <?php
+                   $license_type = get_field('license_type');
+                   if ($license_type) {
+                       list($license_name, $license_url) = split('[|]', $license_type);
+                       printf('许可协议 <a  title="本文的许可协议" href="%s">%s</a>', $license_url, $license_name);
+                   } else {
+                       printf('许可协议 <a title="本文的许可协议" href="http://blog.atime.me/agreement/">使用协议</a>');
+                   }
+                ?>
+		<?php if ( comments_open() ) : ?>
                         <span class="comments-link">
                         <span class="mdash">&mdash;</span>
                     <?php comments_popup_link(__('No Comments &darr;', 'responsive'), __('1 Comment &darr;', 'responsive'), __('% Comments &darr;', 'responsive')); ?>
